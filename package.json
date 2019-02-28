@@ -1,0 +1,23 @@
+{
+  "name": "ng-provider-generator",
+  "version": "0.1.2",
+  "description": "",
+  "main": "dist/lib/index.js",
+  "types": "dist/lib/index.d.ts",
+  "scripts": {
+    "install": "tsc",
+    "build": "tsc",
+    "test": "jest"
+  },
+  "author": "Fábio André Damas",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/jest": "^24.0.9",
+    "jest": "^24.1.0",
+    "ts-jest": "^24.0.0",
+    "typescript": "^3.3.3333"
+  },
+  "dependencies": {
+    "reflect-metadata": "^0.1.13"
+  }
+}
