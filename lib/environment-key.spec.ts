@@ -1,6 +1,11 @@
 import { EnvironmentKey } from "./environment-key";
 
-describe('EnvironmentKey: string', () => {
+// TODO: Add test to fail when set(undefined/null)
+describe.each([
+  ['mock'],
+  [Symbol('mock')],
+  [1]
+])('EnvironmentKey: string', (keyValue) => {
   let environmentKey: EnvironmentKey;
 
   beforeAll(() => {
@@ -16,38 +21,7 @@ describe('EnvironmentKey: string', () => {
   });
 
   test('set() and get()', () => {
-    const keyToSet = 'mock';
-    expect(environmentKey.set(keyToSet)).toBeUndefined();
-    expect(environmentKey.get()).toEqual(keyToSet);
+    expect(environmentKey.set(keyValue)).toBeUndefined();
+    expect(environmentKey.get()).toEqual(keyValue);
   });
-});
-
-describe('EnvironmentKey: Symbol', () => {
-  let environmentKey: EnvironmentKey;
-
-  beforeAll(() => {
-    environmentKey = new EnvironmentKey();
-  });
-
-  test('set() and get()', () => {
-    const keyToSet = Symbol('mock');
-    expect(environmentKey.set(keyToSet)).toBeUndefined();
-    expect(environmentKey.get()).toEqual(keyToSet);
-  })
-});
-
-describe('EnvironmentKey: number', () => {
-  let environmentKey: EnvironmentKey;
-
-  beforeAll(() => {
-    environmentKey = new EnvironmentKey();
-  });
-
-  test('set() and get()', () => {
-    enum Env {
-      MOCK = 1
-    }
-    expect(environmentKey.set(Env.MOCK)).toBeUndefined();
-    expect(environmentKey.get()).toEqual(Env.MOCK);
-  })
 });

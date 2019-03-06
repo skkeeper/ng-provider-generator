@@ -21,7 +21,11 @@ describe('ConfigNode', () => {
   });
 
   test('constructor', () => {
-    expect(node).toBeTruthy();
+    expect(node).toBeInstanceOf(ConfigNode);
+  });
+
+  test('throws error when environment key not set', () => {
+    expect(() => {node.get()}).toThrow();
   });
 
   test('get() returns an Angular Provider for "real" env', () => {
@@ -46,28 +50,5 @@ describe('ConfigNode', () => {
     expect(firstDep).toEqual(MockHttp);
     const secondDep = generated.deps[1];
     expect(secondDep).toEqual(MockLog);
-  });
-});
-
-describe('ConfigNode error checking', () => {
-  let node: ConfigNode;
-  const provide = BaseApi;
-  const environmentKeyReal = 'real';
-  const environmentKeyMock = 'mock';
-  let environmentKey: EnvironmentKey;
-
-  beforeAll(() => {
-    environmentKey = new EnvironmentKey();
-    node = new ConfigNode(
-      provide,
-      new Map([
-        [environmentKeyReal, RealApi],
-        [environmentKeyMock, MockApi]
-      ]),
-      environmentKey);
-  });
-
-  test('throws error when environment key not set', () => {
-    const generated = expect(() => {node.get()}).toThrow();
   });
 });

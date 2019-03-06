@@ -1,4 +1,4 @@
-import {ProviderFactory, GeneratorParams} from './provider-factory';
+import {ProviderFactory} from './provider-factory';
 
 import { ProviderConfig } from './provider-config';
 
@@ -18,17 +18,9 @@ import { Class } from './globals';
 
 let generator: ProviderConfig;
 
-function dualEnvironmentWithParamsSetup (config: GeneratorParams[]) {
-  beforeEach(() => {
-    generator = ProviderFactory.createFromObject(config);
-  });
-
-  dualEnvironmentTests(config[0].provide);
-}
-
-function dualEnvironmentTests(provide: Class | string) {
+function dualEnvironmentTests(provide: Class) {
   test('constructor', () => {
-    expect(generator).toBeTruthy();
+    expect(generator).toBeInstanceOf(ProviderConfig);
   });
 
   test('errors out if no environment is selected', () => {
@@ -43,24 +35,24 @@ function dualEnvironmentTests(provide: Class | string) {
   test('returns real environment config', () => {
     generator.setEnvironment('real');
     const generated = generator.getConfig()[0];
-    expect(generated.provide).toEqual(provide);
+    expect(generated.provide).toBe(provide);
     expect(generated.useFactory).toBeTruthy();
     expect(generated.useFactory.call(generated.deps)).toBeInstanceOf(RealApi);
     const firstDep = generated.deps[0];
-    expect(firstDep).toEqual(RealLog);
+    expect(firstDep).toBe(RealLog);
     const secondDep = generated.deps[1];
-    expect(secondDep).toEqual(RealHttp);
+    expect(secondDep).toBe(RealHttp);
   });
 
   test('returns real environment config', () => {
     generator.setEnvironment('mock');
     const generated = generator.getConfig()[0];
-    expect(generated.provide).toEqual(provide);
+    expect(generated.provide).toBe(provide);
     expect(generated.useFactory.call(generated.deps)).toBeInstanceOf(MockApi);
     const firstDep = generated.deps[0];
-    expect(firstDep).toEqual(MockHttp);
+    expect(firstDep).toBe(MockHttp);
     const secondDep = generated.deps[1];
-    expect(secondDep).toEqual(MockLog);
+    expect(secondDep).toBe(MockLog);
   });
 
   test('getDependencies() returns dependencies for real env', () => {
@@ -78,20 +70,24 @@ function dualEnvironmentTests(provide: Class | string) {
   });
 }
 
-describe('ProviderGenerator: dual environment configuration', () => {
-  dualEnvironmentWithParamsSetup(factoryObjectParams);
+describe.each([
+  [factoryObjectParams],
+  [factoryObjectWithStringParams],
+  [factoryMapParams]
+])('ProviderGenerator: dual environment configuration', (config) => {
+  beforeEach(() => {
+    generator = ProviderFactory.createFromObject(config);
+  });
+
+  dualEnvironmentTests(config[0].provide);
 });
 
-
-describe('ProviderGenerator: dual environment configuration with string for provide', () => {
-  dualEnvironmentWithParamsSetup(factoryObjectWithStringParams);
-});
-
-
-describe('ProviderGenerator: dual environment configuration with Map for implementations', () => {
-  dualEnvironmentWithParamsSetup(factoryMapParams);
-});
 
 describe('ProviderGenerator: dual enviroment configuration with decorators', () => {
+  beforeEach(() => {
+    generator = ProviderFactory.createFromDecorators();
+  });
 
-})
+  dualEnvironmentTests(BaseApi);
+});
+
