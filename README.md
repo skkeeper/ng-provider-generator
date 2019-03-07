@@ -21,6 +21,8 @@ Install the npm package:
 
 # Usage
 
+## Configuration by object parameters
+
 Example configuration
 ```js
 
@@ -65,17 +67,11 @@ export class AppModule { }
 
 The example above assumes the following service hierarchy:
 ```js
-export class BaseApi {
+export class BaseApi {}
 
-}
+export class MockJson {}
 
-export class MockJson {
-
-}
-
-export class MockLog {
-
-}
+export class MockLog {}
 
 @Injectable
 export class MockApi extends BaseApi {
@@ -84,13 +80,9 @@ export class MockApi extends BaseApi {
   }
 }
 
-export class RealHttp {
+export class RealHttp {}
 
-}
-
-export class RealLog {
-
-}
+export class RealLog {}
 
 @Injectable
 export class RealApi extends BaseApi {
@@ -99,6 +91,75 @@ export class RealApi extends BaseApi {
   }
 }
 ```
+
+## Configuration by decorators
+
+It's also possible to configure the environment with class decorators.
+
+```js
+import { Injectable } from 'ng-provider-generator';
+
+export class BaseApi {}
+
+export class MockJson {}
+
+export class MockLog {}
+
+@Injectable({
+  provide: BaseApi,
+  environmentKey: 'mock'
+})
+export class MockApi extends BaseApi {
+  constructor(http: MockJson, log: MockLog) {
+    super();
+  }
+}
+
+export class RealHttp {}
+
+export class RealLog {}
+
+@Injectable({
+  provide: BaseApi,
+  environmentKey: 'real'
+})
+export class RealApi extends BaseApi {
+  constructor(log: RealLog, http: RealHttp) {
+    super();
+  }
+}
+```
+
+Make sure the classes that have the decorators are loaded and then generate the configuration object with the factory:
+```js
+// app.module.ts
+
+import { providerConfig } from './provider-config' 
+
+import { ProviderFactory } from 'ng-provider-generator';
+
+const provider = ProviderFactory.createFromDecorators();
+provider.setEnvironment('mock');
+
+@NgModule({
+  declarations: [
+    AppComponent
+  ],
+  imports: [
+    BrowserModule,
+    AppRoutingModule
+  ],
+  providers: [
+    ...
+    provider.getConfig()
+  ],
+  bootstrap: [AppComponent]
+})
+export class AppModule { }
+
+```
+
+
 
 # Contribute
 
