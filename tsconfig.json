@@ -8,9 +8,10 @@
     "declaration": true,
     "outDir": "./dist",
     "lib": ["es6"],
-
   },
   "exclude": [
-    "**/*.spec.ts"
+    "dist/",
+    "tests/",
+    "**/*.spec.ts",
   ]
 }
