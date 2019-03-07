@@ -1,6 +1,6 @@
 {
   "name": "ng-provider-generator",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "Generate an Angular Provider dynamically by setting an environment flag.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
