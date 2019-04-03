@@ -134,8 +134,6 @@ Make sure the classes that have the decorators are loaded and then generate the 
 ```js
 // app.module.ts
 
-import { providerConfig } from './provider-config' 
-
 import { ProviderFactory } from 'ng-provider-generator';
 
 const provider = ProviderFactory.createFromDecorators();

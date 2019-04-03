@@ -17,10 +17,4 @@ export class ProviderConfig {
       return node.get();
     });
   }
-
-  getDependencies() : Class[] {
-    return this.getConfig().reduce((deps: Class[], config: AngularProvider) => {
-      return deps.concat(config.deps);
-    }, []);
-  }
 }

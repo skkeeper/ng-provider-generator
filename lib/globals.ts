@@ -1,7 +1,6 @@
 export type AngularProvider = {
   provide: string | Class,
-  useFactory: Function,
-  deps: Class[]
+  useClass: Class
 }
 
 export type Class = (new (...args: any[]) => any);

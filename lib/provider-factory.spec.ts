@@ -36,37 +36,14 @@ function dualEnvironmentTests(provide: Class) {
     generator.setEnvironment('real');
     const generated = generator.getConfig()[0];
     expect(generated.provide).toBe(provide);
-    expect(generated.useFactory).toBeTruthy();
-    expect(generated.useFactory.call(generated.deps)).toBeInstanceOf(RealApi);
-    const firstDep = generated.deps[0];
-    expect(firstDep).toBe(RealLog);
-    const secondDep = generated.deps[1];
-    expect(secondDep).toBe(RealHttp);
+    expect(generated.useClass).toBe(RealApi);
   });
 
   test('returns real environment config', () => {
     generator.setEnvironment('mock');
     const generated = generator.getConfig()[0];
     expect(generated.provide).toBe(provide);
-    expect(generated.useFactory.call(generated.deps)).toBeInstanceOf(MockApi);
-    const firstDep = generated.deps[0];
-    expect(firstDep).toBe(MockHttp);
-    const secondDep = generated.deps[1];
-    expect(secondDep).toBe(MockLog);
-  });
-
-  test('getDependencies() returns dependencies for real env', () => {
-    generator.setEnvironment('real');
-    const deps = generator.getDependencies();
-    expect(deps).toContain(RealHttp);
-    expect(deps).toContain(RealLog);
-  });
-
-  test('getDependencies() returns dependencies for mock env', () => {
-    generator.setEnvironment('mock');
-    const deps = generator.getDependencies();
-    expect(deps).toContain(MockHttp);
-    expect(deps).toContain(MockLog);
+    expect(generated.useClass).toBe(MockApi);
   });
 }
 

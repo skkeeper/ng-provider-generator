@@ -1,7 +1,6 @@
 import {Class, AngularProvider} from './globals'
 
 import {EnvironmentKey} from './environment-key'
-import {Utils} from './utils'
 
 export class ConfigNode {
   constructor(
@@ -16,8 +15,7 @@ export class ConfigNode {
 
     return {
       provide: this.provide,
-      useFactory: this.providerFactoryGenerator.bind(this),
-      deps: Utils.getConstructorArgumentTypes(toInstantiate)
+      useClass: toInstantiate
     }
   }
 
@@ -29,11 +27,5 @@ export class ConfigNode {
     }
 
     return toInstantiate;
-  }
-
-  private providerFactoryGenerator(deps: Class[]) {
-    const toInstantiate = this.getClassToInstantiate();
-
-    return new toInstantiate(deps);
   }
 }

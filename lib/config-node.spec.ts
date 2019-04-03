@@ -32,23 +32,13 @@ describe('ConfigNode', () => {
     environmentKey.set(environmentKeyReal);
     const generated = node.get();
     expect(generated.provide).toEqual(provide);
-    expect(generated.useFactory).toBeTruthy();
-    expect(generated.useFactory.call(generated.deps)).toBeInstanceOf(RealApi);
-    const firstDep = generated.deps[0];
-    expect(firstDep).toEqual(RealLog);
-    const secondDep = generated.deps[1];
-    expect(secondDep).toEqual(RealHttp);
+    expect(generated.useClass).toBe(RealApi);
   });
 
   test('get() returns an Angular Provider for "mock" env', () => {
     environmentKey.set(environmentKeyMock);
     const generated = node.get();
     expect(generated.provide).toEqual(provide);
-    expect(generated.useFactory).toBeTruthy();
-    expect(generated.useFactory.call(generated.deps)).toBeInstanceOf(MockApi);
-    const firstDep = generated.deps[0];
-    expect(firstDep).toEqual(MockHttp);
-    const secondDep = generated.deps[1];
-    expect(secondDep).toEqual(MockLog);
+    expect(generated.useClass).toBe(MockApi);
   });
 });
